@@ -5,7 +5,7 @@
                 <img :src="logo" alt="" width="70px" height="70px"></img>
                 <h1 class="ml">my vue project</h1>
             </div>
-            <el-form :ref="formRef" :model="ruleForm" :rules="rules">
+            <el-form ref="formRef" :model="ruleForm" :rules="rules">
                 <el-form-item prop="username">
                     <el-input v-model="ruleForm.username" placeholder="Username" prefix-icon="User"></el-input>
                 </el-form-item>
@@ -13,7 +13,7 @@
                     <el-input v-model="ruleForm.password" placeholder="Password" show-password prefix-icon="Lock"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" style="width: 100%;">Login</el-button>
+                    <el-button type="primary" style="width: 100%;" @click="login">Login</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -23,8 +23,16 @@
 import logo from '@/assets/logo.png'
 import { reactive, ref } from 'vue'
 
-const formRef = ref(null);
-
+const formRef = ref();
+const login = () => {
+    formRef.value.validate((valid)=>{
+        if(valid){
+            console.log('login success');
+        }else{
+            console.log('login failed');
+        }
+    }); 
+}
 const ruleForm = reactive({
     username: '',
     password: ''
