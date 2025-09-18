@@ -25,7 +25,7 @@ import { reactive, ref } from 'vue'
 
 const formRef = ref();
 const login = () => {
-    formRef.value.validate((valid)=>{
+    formRef.value.validate(async (valid)=>{
         if(valid){
             console.log('login success');
         }else{
