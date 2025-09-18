@@ -25,7 +25,7 @@ service.interceptors.response.use((response) => {
         message: error.message,
         type: 'error',
     });
-    return Promise.reject(error);
+    return Promise.reject(error); // throw error
 });
 
 export default service

@@ -22,14 +22,13 @@
 <script setup>
 import logo from '@/assets/logo.png'
 import { reactive, ref } from 'vue'
-
+import { useAuthStore } from '@/store/auth';
 const formRef = ref();
+const authStore = useAuthStore();
 const login = () => {
-    formRef.value.validate(async (valid)=>{
-        if(valid){
-            console.log('login success');
-        }else{
-            console.log('login failed');
+    formRef.value.validate((valid)=>{
+        if(valid){     
+            authStore.login(ruleForm);
         }
     }); 
 }
@@ -37,6 +36,9 @@ const ruleForm = reactive({
     username: '',
     password: ''
 });
+
+
+
 
 const rules = reactive({
     username: [
