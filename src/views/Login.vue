@@ -23,12 +23,15 @@
 import logo from '@/assets/logo.png'
 import { reactive, ref } from 'vue'
 import { useAuthStore } from '@/store/auth';
+import { useRouter } from 'vue-router';
 const formRef = ref();
 const authStore = useAuthStore();
+const router = useRouter();
 const login = () => {
-    formRef.value.validate((valid)=>{
+    formRef.value.validate(async (valid)=>{
         if(valid){     
-            authStore.login(ruleForm);
+            await authStore.login(ruleForm);
+            router.push('/');
         }
     }); 
 }

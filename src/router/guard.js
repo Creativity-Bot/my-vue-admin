@@ -1,0 +1,16 @@
+import router from "@/router";
+import { useAuthStore } from "@/store/auth";
+router.beforeEach((to, from)=>{
+    const authStore = useAuthStore();
+    if(authStore.token){
+        // logged in
+        if(to.path === '/login'){
+            return { path: '/' };
+        }
+    }else{
+        // not logged in
+        if(to.path !== '/login'){
+            return { path: '/login' };
+        }
+    }
+});

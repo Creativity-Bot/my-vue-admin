@@ -17,8 +17,16 @@ service.interceptors.request.use((config) => {
 });
 
 service.interceptors.response.use((response) => {
-    console.log('response', response);
-    return response;
+    if(response.data.code == '200'){
+        return response.data;
+    }else{
+        ElNotification({
+        title: 'Error',
+        message: response.data.message,
+        type: 'error',
+        });
+        return Promise.reject(new Error(response.data.message)); // throw error
+    }
 }, (error) => {
     ElNotification({
         title: 'Error',

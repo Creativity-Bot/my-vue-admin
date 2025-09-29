@@ -192,7 +192,7 @@ Mock.mock("http://www.demo.com/login", "post", (options) => {
     else{
         return {
             code: 401,
-            message: "Login failed",
+            message: "Your account does not exist, pls check username or password",
         }
     }
 });
