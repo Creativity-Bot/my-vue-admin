@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { sendLogin } from '@/api/login';
-import { ElNotification } from 'element-plus';
 export const useAuthStore = defineStore("auth", ()=>{
     const token = ref(sessionStorage.getItem('token') || '');
     const userName = ref(sessionStorage.getItem('userName') || '');
@@ -22,7 +21,7 @@ export const useAuthStore = defineStore("auth", ()=>{
             sessionStorage.setItem('roles', JSON.stringify(roles));
             sessionStorage.setItem('menu', JSON.stringify(menus));
         }catch(error){
-            //console.log(error);
+            console.log(error);
         }
     }
 

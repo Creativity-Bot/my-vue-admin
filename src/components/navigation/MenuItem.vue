@@ -27,5 +27,8 @@ export default defineComponent({
     }
 });
 </script>
-<style scoped>
+<style scoped lang="less">
+.is-active{
+    background-color: rgb(red, green, blue)
+}
 </style>
