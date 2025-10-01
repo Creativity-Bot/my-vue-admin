@@ -29,6 +29,12 @@ export default defineComponent({
 </script>
 <style scoped lang="less">
 .is-active{
-    background-color: rgb(red, green, blue)
+    background-color: rgb(34, 134, 255);
+    color: #fff !important;
+    div{
+        span{
+            color: #fff !important;
+        }
+    }
 }
 </style>

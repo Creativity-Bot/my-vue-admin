@@ -3,7 +3,7 @@
         <img :src="logo" alt="logo" width="34px" height="34px"></img>
         <h1>My Vue</h1>
     </div>
-    <el-menu>
+    <el-menu :router="true" :default-active="$route.path">
         <menu-item
             v-for="item in menu"
             :key="item.url"
