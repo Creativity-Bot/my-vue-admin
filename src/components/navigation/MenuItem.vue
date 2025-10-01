@@ -37,4 +37,12 @@ export default defineComponent({
         }
     }
 }
+.el-menu-item:hover{
+    background-color: rgb(34, 134, 255);
+    color: #fff !important;
+}
+:deep(.el-sub-menu__title:hover) {
+    background-color: rgb(34, 134, 255);
+    color: #fff !important;
+}
 </style>
