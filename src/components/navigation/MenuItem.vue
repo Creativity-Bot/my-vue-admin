@@ -1,5 +1,5 @@
 <template>
-    <el-menu-item v-if="!item.children" :index="item.url" v-show="item.url !== '/operations/detail'">
+    <el-menu-item v-if="!item.children" :index="item.url" v-show="item.url !== '/operations/detail'" @click="handleClick(item)">
         <el-icon><component :is="item.icon"/></el-icon>
         <span>{{ item.name }}</span>
     </el-menu-item>
@@ -14,6 +14,7 @@
 </template>
 <script>
 import { defineComponent } from 'vue';
+import { useTabsStore } from '@/store/tabs';
 export default defineComponent({
     name: 'MyMenu',
     props: {
@@ -23,6 +24,15 @@ export default defineComponent({
         }
     },
     setup() {
+        const tabsStore = useTabsStore();
+        const { addTab, setCurrentTab } = tabsStore;
+        const handleClick = (item) => {
+            addTab(...Object.values(item));
+            setCurrentTab(item.name, item.url);
+        }
+        return {
+            handleClick
+        }
         // component logic here
     }
 });

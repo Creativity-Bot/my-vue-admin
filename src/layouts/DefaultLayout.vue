@@ -7,7 +7,6 @@
         <el-header><TopHeader></TopHeader></el-header>
         <el-main>
           <TabsLayout></TabsLayout>
-          <router-view></router-view>
         </el-main>
       </el-container>
     </el-container>
