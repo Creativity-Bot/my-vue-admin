@@ -4,13 +4,18 @@
         <Menu></Menu>
       </el-aside>
       <el-container>
-        <el-header>Header</el-header>
-        <el-main><router-view></router-view></el-main>
+        <el-header><TopHeader></TopHeader></el-header>
+        <el-main>
+          <TabsLayout></TabsLayout>
+          <router-view></router-view>
+        </el-main>
       </el-container>
     </el-container>
 </template>
 <script setup>
 import Menu from '@/components/navigation/Menu.vue';
+import TopHeader from '@/components/header/TopHeader.vue';
+import TabsLayout from '@/layouts/TabsLayout.vue';
 </script>
 <style scoped>
 .el-aside {

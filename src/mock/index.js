@@ -169,7 +169,8 @@ Mock.mock("http://www.demo.com/login", "post", (options) => {
                 token: "sfdsfdsfdsfsfddsfsf",
                 user:{
                     username: "sibo",
-                    roles: ["admin"]
+                    roles: ["admin"],
+                    avatar: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
                 },
                 menus: menulist
             }

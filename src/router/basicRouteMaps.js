@@ -58,12 +58,18 @@ const routes = [
             {
                 path: '/quote',
                 name: 'quote',
-                component: () => import('@/views/quote/Quote.vue')
+                component: () => import('@/views/quote/Quote.vue'),
+                meta: {
+                    roles: ['admin', 'manager']
+                }
             },
             {
                 path: '/system',
                 name: 'system',
-                component: () => import('@/views/system/System.vue')
+                component: () => import('@/views/system/System.vue'),
+                meta: {
+                    roles: ['admin']
+                }
             },
             {
                 path: '/personal',
