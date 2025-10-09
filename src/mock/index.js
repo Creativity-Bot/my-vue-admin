@@ -197,3 +197,42 @@ Mock.mock("http://www.demo.com/login", "post", (options) => {
         }
     }
 });
+
+Mock.mock("http://www.demo.com/chartData",'get',()=>{
+  return {
+    code: 200,
+    message: 'success',
+    data: {
+      list:[
+        {name:"充电量",data: [20, 50, 30, 70, 60, 80, 40, 60, 50]},
+        {name:"充电时长",data: [40, 60, 50, 80, 70, 90, 60, 70, 80]},
+        {name:"充电功率",data:  [30, 40, 60, 50, 70, 20, 30, 40, 60]}
+      ]
+    }
+  };
+});
+
+Mock.mock("http://www.demo.com/pieChartData",'get',()=>{
+  return {
+    code: 200,
+    message: '操作成功',
+    data: {
+      list:[
+        { value: 35, name: '充电桩' },  // 数据值和名称
+        { value: 30, name: '充电站' },
+        { value: 25, name: '充电杆' }
+      ]
+    }
+  };
+})
+
+//echarts图表数据接口3 雷达图
+Mock.mock("http://www.demo.com/chartRadarData",'get',()=>{
+  return {
+    code: 200,
+    message: '操作成功',
+    data: {
+      list: [42, 30, 200, 350, 500, 180]
+    }
+  };
+})
