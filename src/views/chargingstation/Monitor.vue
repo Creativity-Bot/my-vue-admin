@@ -45,7 +45,7 @@
         </el-row>
     </el-card>
     <el-card class="mt">
-        <el-button type="primary">
+        <el-button type="primary" @click="add">
             <el-icon style="margin-right: 5px;">
                 <Plus />
             </el-icon>
@@ -75,20 +75,27 @@
             <el-table-column width="200" label="操作">
                 <template #default="scope">
                     <el-button type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
-                    <el-button type="danger" size="small">删除</el-button>
+                    <el-popconfirm title="确定删除吗？" @confirm="deleteFn(scope.row.id)">
+                        <template #reference>
+                            <el-button type="danger" size="small">删除</el-button>
+                        </template>
+                    </el-popconfirm>
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination class="mt fr mb" v-model:current-page="searchCondition.currentPage" v-model:page-size="searchCondition.pageSize" background
-            :page-sizes="[10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
+        <el-pagination class="mt fr mb" v-model:current-page="searchCondition.currentPage"
+            v-model:page-size="searchCondition.pageSize" background :page-sizes="[10, 20, 30, 40]"
+            layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
             @current-change="handleCurrentChange" />
     </el-card>
-    <ChargingStationDialogue v-model:visible="showDialog" />
+    <ChargingStationDialogue v-model:visible="showDialog" :disabled="disabled" @reload="getList" />
 </template>
 <script setup>
 import { reactive, onMounted, ref } from 'vue';
-import { getListApi } from '@/api/chargingStation';
+import { getListApi, deleteApi } from '@/api/chargingStation';
 import ChargingStationDialogue from './components/chargingStationDialogue.vue';
+import { useStationStore } from '@/store/station.js';
+import { ElMessage } from 'element-plus';
 
 const list = ref([]);
 const total = ref(0);
@@ -136,15 +143,37 @@ onMounted(() => {
     getList();
 });
 
+const stationStore = useStationStore();
+const { setRowData, resetRowData } = stationStore;
 const showDialog = ref(false);
+const disabled = ref(false);
 const edit = (row) => {
     showDialog.value = true;
-    //formData.value = row;
+    setRowData(row);
 }
 
+const add = () => {
+    showDialog.value = true;
+    disabled.value = false;
+    resetRowData();
+}
 
+const deleteFn = async (id) => {
+    try {
+        let res = await deleteApi(id);
+        ElMessage({
+            message: res.data,
+            type: 'success',
+        });
+        getList();
 
-
+    } catch (error) {
+        ElMessage({
+            message: error.message,
+            type: 'error',
+        });
+    }
+}
 </script>
 
 <style scoped lang="less"></style>

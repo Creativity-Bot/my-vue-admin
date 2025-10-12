@@ -631,7 +631,6 @@ const originalChargingStation = JSON.parse(JSON.stringify(chargingStation));
 Mock.mock("http://www.demo.com/stationList", 'post', (options) => {
   chargingStation = originalChargingStation
   const { id, name, status, page, pageSize } = options.body ? JSON.parse(options.body) : {}
-  console.log(id, name, status, page, pageSize);
   // 根据条件过滤数据
   if (id) {
     chargingStation = chargingStation.filter(item => item.id === id);
@@ -646,7 +645,6 @@ Mock.mock("http://www.demo.com/stationList", 'post', (options) => {
   const total = chargingStation.length;
   const start = (page - 1) * pageSize;
   const paginatedItems = chargingStation.slice(start, start + pageSize);
-  console.log(paginatedItems, total);
   return {
     code: 200,
     success: true,
@@ -656,3 +654,25 @@ Mock.mock("http://www.demo.com/stationList", 'post', (options) => {
     },
   };
 });
+
+
+Mock.mock("http://www.demo.com/station/edit", 'post', (options) => {
+  const res = JSON.parse(options.body);
+  console.log("新增/编辑充电站接口收到数据：",res)
+  return {
+    code: 200,
+    success: true,
+    data: "操作成功",
+  };
+});
+
+
+//删除充电站接口
+Mock.mock("http://www.demo.com/station/delete", "post", (options) => {
+  console.log("删除充电站接口收到参数", JSON.parse(options.body))
+  return {
+    code: 200,
+    success: true,
+    data: "操作成功",
+  };
+})
