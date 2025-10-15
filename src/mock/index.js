@@ -676,3 +676,23 @@ Mock.mock("http://www.demo.com/station/delete", "post", (options) => {
     data: "操作成功",
   };
 })
+
+//营收统计图表
+Mock.mock("http://www.demo.com/revenueChart", "get", () => {
+  return {
+    code: 200,
+    success: true,
+    data: {
+      list:[
+        {
+          name:"销售",
+          data:[60, 40, 120, 140, 160, 80, 140]
+        },
+        {
+          name:"访问量",
+          data:[600, 400, 600, 700, 800, 400, 700]
+        },
+      ]
+    }
+  };
+})
