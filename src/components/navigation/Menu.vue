@@ -24,7 +24,7 @@ const { menu } = storeToRefs(authStore);
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 50px;
+    height: 60px;
     img{
         margin-right: 10px;
     }
@@ -33,6 +33,7 @@ const { menu } = storeToRefs(authStore);
         color: #333;
     }
     padding: 0 10px;
+    background-color: white;
 }
 .el-menu{
     border-right: none;

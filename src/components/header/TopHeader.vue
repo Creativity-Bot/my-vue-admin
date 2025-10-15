@@ -43,6 +43,7 @@ const handleCommand = (command) => {
 <style lang="less" scoped>
 .header{
     background-color: white;
+    height: 60px;
     padding: 0 20px;
     .personal{
         float: right;
