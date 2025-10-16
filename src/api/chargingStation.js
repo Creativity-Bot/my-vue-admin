@@ -4,6 +4,7 @@ const ChargingApiType = {
     CHARGING_STATION_EDIT: '/station/edit',
     CHARGING_STATION_DELETE: '/station/delete',
     REVENUE_CHART: '/revenueChart',
+    REVENUE_LIST: '/revenueList',
 }
 
 function getListApi(data){
@@ -22,4 +23,8 @@ function revenueChartApi(){
     return get(ChargingApiType.REVENUE_CHART);
 }
 
-export { getListApi, editApi, deleteApi, revenueChartApi };
+function revenueListApi(data){
+    return post(ChargingApiType.REVENUE_LIST, data);
+}
+
+export { getListApi, editApi, deleteApi, revenueChartApi, revenueListApi };

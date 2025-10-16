@@ -103,12 +103,52 @@
         <el-card class="mt">
             <div ref="chartRef" style="width: 100%; height: 300px;"></div>
         </el-card>
+        <el-card class="mt">
+            <el-input v-model="searchName" placeholder="请输入站点名称" class="mb" style="width: 300px;">
+                <template #append>
+                    <el-button icon="Search" @click="getRevenueListData">查询</el-button>
+                </template>
+            </el-input>
+            <el-table :data="tableData" v-loading="loading">
+                <el-table-column type="index" label="序号" width="80"></el-table-column>
+                <el-table-column label="充电站名称" prop="name"></el-table-column>
+                <el-table-column label="充电站ID" prop="id"></el-table-column>
+                <el-table-column label="所属城市" prop="city"></el-table-column>
+                <el-table-column label="充电桩总量(个)" prop="count"></el-table-column>
+                <el-table-column label="单日总收入(元)" prop="day" sortable>
+                    <template #default="scope">
+                        <span>{{ scope.row.day }}</span>
+                        <el-tag :type="scope.row.percent > 0 ? 'danger' : 'success'" class="ml">
+                            {{ scope.row.percent > 0 ? "+" + scope.row.percent + "%" : scope.row.percent + "%" }}
+                        </el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="月度总收入(万元)" prop="month">
+                    <template #default="scope">
+                        <span>{{ scope.row.month }}</span>
+                        <el-tag :type="scope.row.mpercent > 0 ? 'danger' : 'success'" class="ml">
+                            {{ scope.row.mpercent > 0 ? "+" + scope.row.mpercent + "%" : scope.row.mpercent + "%" }}
+                        </el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="电费营收(元)" prop="electricity"></el-table-column>
+                <el-table-column label="停车费营收(元)" prop="parkingFee"></el-table-column>
+                <el-table-column label="服务费营收(元)" prop="serviceFee"></el-table-column>
+                <el-table-column label="会员储值金(元)" prop="member"></el-table-column>
+            </el-table>
+        </el-card>
+        <el-pagination class="mt fr mb" v-model:current-page="pageInfo.currentPage"
+            v-model:page-size="pageInfo.pageSize" background :page-sizes="[10, 20, 30, 40]"
+            layout="total, sizes, prev, pager, next, jumper" :total="totals" @size-change="handleSizeChange"
+            @current-change="handleCurrentChange" />
     </div>
 </template>
 <script setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
 import { revenueChartApi } from '@/api/chargingStation';
 import { useChart } from '@/hooks/useChart';
+import { revenueListApi } from '@/api/chargingStation';
+import { usePagination } from '@/hooks/usePagination';
 const chartRef = ref(null);
 
 const getRevenueChartData = async () => {
@@ -172,7 +212,27 @@ const getRevenueChartData = async () => {
 
 useChart(chartRef, getRevenueChartData);
 
+const tableData = ref([]);
+const loading = ref(false);
+const searchName = ref('');
+const getRevenueListData = async () => {
+    loading.value = true;
+    let { data: { list, total: totalValue } } = await revenueListApi({page:pageInfo.currentPage, pageSize:pageInfo.pageSize, name:searchName.value});
+    list = list.map(item => {
+        return {
+            ...item,
+            day: item.electricity + item.parkingFee + item.serviceFee + item.member,
+        }
+    });
+    tableData.value = list;
+    setTotals(totalValue);
+    loading.value = false;
+}
+const {totals,pageInfo,handleSizeChange,handleCurrentChange,setTotals} = usePagination(getRevenueListData);
 
+onMounted(() => {
+    getRevenueListData();
+})
 
 
 </script>
