@@ -136,11 +136,11 @@
                 <el-table-column label="服务费营收(元)" prop="serviceFee"></el-table-column>
                 <el-table-column label="会员储值金(元)" prop="member"></el-table-column>
             </el-table>
-        </el-card>
-        <el-pagination class="mt fr mb" v-model:current-page="pageInfo.currentPage"
+            <el-pagination class="mt fr mb" v-model:current-page="pageInfo.currentPage"
             v-model:page-size="pageInfo.pageSize" background :page-sizes="[10, 20, 30, 40]"
             layout="total, sizes, prev, pager, next, jumper" :total="totals" @size-change="handleSizeChange"
             @current-change="handleCurrentChange" />
+        </el-card>
     </div>
 </template>
 <script setup>
