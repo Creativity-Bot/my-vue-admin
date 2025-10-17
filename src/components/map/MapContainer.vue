@@ -4,11 +4,65 @@
 <script setup>
 import AMapLoader from '@amap/amap-jsapi-loader';
 import icon from '@/assets/flashIcon.png';
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 import station from "@/assets/station.jpg"
 import { getMapList } from '@/api/map';
+
+const props = defineProps({
+    newMarker: {
+        type: Object,
+        default: null
+    }
+});
+
 const markersData = ref([]);
 let map = null;
+
+// 创建 marker 的函数
+const createMarker = (item) => {
+    if (!map) return;
+    
+    // 创建信息窗体
+    const infoWindow = new AMap.InfoWindow({
+        offset: new AMap.Pixel(5, -30),
+    });
+    
+    const marker = new AMap.Marker({
+        position: item.position,
+        title: item.title,
+        icon: icon,
+    });
+    
+    marker.on('click', () => {
+        infoWindow.setContent(`
+        <div style="display:flex;padding:10px;align-items:center">
+            <div>
+                <img src=${station} style:"width: 200px;">
+            </div>
+            <div style="width: 180px; line-height: 40px; margin-left: 20px;">
+                <h3>${item.title}</h3>
+                <p>充电桩数量：${item.count}</p>   
+                <p>充电站状态：<span style="color:blue">${item.status == 1 ? "空闲中" : "使用中"}</span></p>
+            </div>
+        </div>`
+        );
+        infoWindow.open(map, marker.getPosition());
+    });
+    
+    map.add(marker);
+    return marker;
+};
+
+// 监听新 marker 数据
+watch(() => props.newMarker, (newMarker) => {
+    if (newMarker && map) {
+        // 将新 marker 添加到数据中
+        markersData.value.push(newMarker);
+        // 在地图上创建新的 marker
+        createMarker(newMarker);
+    }
+}, { deep: true });
+
 onMounted(() => {
     AMapLoader.load({
         key: '821ddc99d349a1afec2f8ee038e57e51',
@@ -25,33 +79,8 @@ onMounted(() => {
         getMapList().then(({data}) => {
             markersData.value = data;
             markersData.value.forEach((item) => {
-                //创建信息窗体
-                const infoWindow = new AMap.InfoWindow({
-                    offset: new AMap.Pixel(5,-30),
-                });
-                const marker = new AMap.Marker({
-                    position: item.position,
-                    title: item.title,
-                    icon: icon,
-                });
-                marker.on('click', () => {
-                    infoWindow.setContent(`
-                    <div style="display:flex;padding:10px;align-items:center">
-                        <div>
-                            <img src=${station} style:"width: 200px;">
-                        </div>
-                        <div style="width: 180px; line-height: 40px; margin-left: 20px;">
-                            <h3>${item.title}</h3>
-                            <p>充电桩数量：${item.count}</p>   
-                            <p>充电站状态：<span style="color:blue">${item.status == 1 ? "空闲中" : "使用中"}</span></p>
-                        </div>
-                    </div>`
-                    );
-                    infoWindow.open(map, marker.getPosition());
-                });
-                map.add(marker);
+                createMarker(item);
             });
-
         })
     }).catch((err) => {
         console.log(err);

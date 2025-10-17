@@ -2,7 +2,7 @@
     <el-row :gutter="20">
         <el-col :span="18">
             <el-card>
-                <MapContainer></MapContainer>
+                <MapContainer :newMarker="newMarker"></MapContainer>
             </el-card>
         </el-col>
         <el-col :span="6">
@@ -56,6 +56,7 @@ import { ElMessage } from 'element-plus';
 import { reactive, ref, toRaw } from 'vue';
 import { addMap } from '@/api/map';
 const formRef = ref(null);
+const newMarker = ref(null);
 const form = reactive({
     name: '',
     region: '',
@@ -83,6 +84,17 @@ const handleConfirm = () => {
                     message: res.data,
                     type: 'success',
                 });
+                
+                // 创建新的 marker 数据并传递给 MapContainer
+                newMarker.value = {
+                    title: form.name,
+                    position: [parseFloat(form.location1), parseFloat(form.location2)],
+                    count: 1, // 默认充电桩数量
+                    status: form.now ? 1 : 0, // 根据是否立即使用设置状态
+                };
+                
+                // 清空表单
+                handleClear();
             }
             catch (error) {
                 ElMessage({
