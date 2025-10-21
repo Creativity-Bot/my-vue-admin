@@ -28,7 +28,7 @@
         </el-row>
     </el-card>
     <el-card class="mt">
-        <el-button type="danger" :disabled="selectedRows.length === 0" @click="">批量删除</el-button>
+        <el-button type="danger" :disabled="selectedRows.length === 0" @click="batchDelete">批量删除</el-button>
         <el-button icon="Download" type="primary" :disabled="selectedRows.length === 0" @click="">批量导出到Excel</el-button>
     </el-card>
     <el-card class="mt">
@@ -66,6 +66,8 @@
 <script setup>
 import { useHttp } from '@/hooks/useHttp';
 import { ref, toRefs, reactive} from 'vue';
+import { batchDeleteApi } from '@/api/operations';
+import { ElMessage } from 'element-plus';
 const date = ref();
 const searchParams = reactive({
     orderId: '',
@@ -127,6 +129,22 @@ const resetSearch = () => {
 const selectedRows = ref([]);
 const handleSelectionChange = (selection) => {
     selectedRows.value = selection;
+}
+
+const batchDelete = async () => {
+    try{
+        let res = await batchDeleteApi(selectedRows.value.map(item => item.orderId));
+        ElMessage({
+            message: res.data,
+            type: 'success',
+        });
+        loadData();
+    }catch(error){
+        ElMessage({
+            message: error.message,
+            type: 'error',
+        });
+    }
 }
 
 </script>

@@ -2203,8 +2203,8 @@ Mock.mock('http://www.demo.com/orderList', 'post', (options) => {
 
 //订单管理-批量删除接口
 Mock.mock('http://www.demo.com/batchDelete', "post", (options) => {
-  const { order } = JSON.parse(options.body)
-  console.log("订单管理批量删除接口",JSON.stringify(order) )
+  const data = JSON.parse(options.body)
+  console.log("订单管理批量删除接口",JSON.stringify(data) )
   return {
     code: 200,
     message: "成功",
