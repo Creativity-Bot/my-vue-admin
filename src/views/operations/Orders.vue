@@ -28,11 +28,13 @@
         </el-row>
     </el-card>
     <el-card class="mt">
-        <el-button type="danger">批量删除</el-button>
-        <el-button icon="Download" type="primary">批量导出到Excel</el-button>
+        <el-button type="danger" :disabled="selectedRows.length === 0" @click="">批量删除</el-button>
+        <el-button icon="Download" type="primary" :disabled="selectedRows.length === 0" @click="">批量导出到Excel</el-button>
     </el-card>
     <el-card class="mt">
-        <el-table :data="listData" style="width: 100%" v-loading="isLoading">
+        <el-table :data="listData" style="width: 100%" v-loading="isLoading" @selection-change="handleSelectionChange">
+            <el-table-column type="selection" width="55" />
+            <el-table-column type="index" label="序号" width="80" />
             <el-table-column prop="orderId" label="订单号"/>
             <el-table-column prop="date" label="订单日期"/>
             <el-table-column prop="startTime" label="开始时间"/>
@@ -43,7 +45,7 @@
                     <span>¥{{ scope.row.money }}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="pay" label="支付方式" />
+            <el-table-column prop="payMethod" label="支付方式" />
             <el-table-column prop="status" label="订单状态">
                 <template #default="scope">
                     <el-tag :type="getStatusType(scope.row.status)">
@@ -120,6 +122,11 @@ const resetSearch = () => {
     });
     resetPagination();
     loadData();
+}
+
+const selectedRows = ref([]);
+const handleSelectionChange = (selection) => {
+    selectedRows.value = selection;
 }
 
 </script>
