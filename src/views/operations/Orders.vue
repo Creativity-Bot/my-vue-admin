@@ -138,7 +138,7 @@ const batchDelete = async () => {
             message: res.data,
             type: 'success',
         });
-        loadData();
+        resetSearch();
     }catch(error){
         ElMessage({
             message: error.message,
