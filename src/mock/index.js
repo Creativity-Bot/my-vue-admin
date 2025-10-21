@@ -2176,3 +2176,429 @@ Mock.mock("http://www.demo.com/addMap", "post", (data) => {
     data: newStation
   }
 })
+
+Mock.mock('http://www.demo.com/orderList', 'post', (options) => {
+  const { pageSize } = JSON.parse(options.body);
+  console.log("后端订单管理接到参数", JSON.parse(options.body))
+  return {
+    code: 200,
+    message: "成功",
+    data: Mock.mock({
+      [`list|${pageSize}`]: [{
+        'orderId': '@string("number", 6)', //订单号
+        'date': '@date("yyyy-MM-dd")',//订单日期
+        'startTime': "08:00:23",//开始时间
+        'endTime': "09:10:11",//结束时间
+        "deviceId|1": ['B109', 'C227', 'C106', "D158"],//设备编号
+        'money|1': [66.5,88.9,22.7,36.5,42.0],//金额
+        'payMethod|1': ["微信", "支付宝", "储值卡",],//支付方式
+        'status|1': [2, 3, 4],//订单状态
+      }],
+      "total": 54
+    })
+    // 生成55条数据
+  }
+});
+
+
+//订单管理-批量删除接口
+Mock.mock('http://www.demo.com/batchDelete', "post", (options) => {
+  const { order } = JSON.parse(options.body)
+  console.log("订单管理批量删除接口",JSON.stringify(order) )
+  return {
+    code: 200,
+    message: "成功",
+    data: "操作成功"
+  }
+})
+
+const cityList = [
+  {
+    label: "北京总部",
+    children: [
+      {
+        label: "东城区",
+        children: [
+          { label: "东城区充电站01" },
+          { label: "东城区充电站02" },
+          { label: "东城区充电站03" },
+          { label: "东城区充电站04" },
+        ]
+      },
+      {
+        label: "西城区",
+        children: [
+          { label: "西城区充电站01" },
+          { label: "西城区充电站02" },
+          { label: "西城区充电站03" },
+        ]
+      },
+      {
+        label: "朝阳区",
+        children: [
+          { label: "朝阳区充电站01" },
+          { label: "朝阳区充电站02" },
+          { label: "朝阳区充电站03" },
+        ]
+      },
+      {
+        label: "海淀区",
+        children: [
+          { label: "海淀区充电站01" },
+          { label: "海淀区充电站02" },
+        ]
+      },
+      {
+        label: "丰台区",
+        children: [
+          { label: "丰台区充电站01" },
+          { label: "丰台区充电站02" },
+        ]
+      }
+
+    ]
+  },
+  {
+    label: "深圳总部",
+    children: [
+      {
+        label: "南山区",
+        children: [
+          {
+            label: "南山区充电站01"
+          }
+        ]
+      }, {
+        label: "福田区",
+        children: [
+          {
+            label: "福田区充电站01"
+          }
+        ]
+      }
+    ]
+  }, {
+    label: "青岛市",
+    children: [
+      {
+        label: "市南区",
+        children: [
+          {
+            label: "市南区充电站01"
+          },
+          {
+            label: "市南区充电站02"
+          }
+        ]
+      },
+      {
+        label: "市北区",
+        children: [
+          {
+            label: "市北区充电站01"
+          },
+          {
+            label: "市北区充电站02"
+          }
+        ]
+      },
+      {
+        label: "崂山区",
+        children: [
+          {
+            label: "崂山区充电站01"
+          },
+          {
+            label: "崂山区充电站02"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    label: "武汉市",
+    children: [
+      {
+        label: "武汉充电站01"
+      },
+      {
+        label: "武汉充电站02"
+      }, {
+        label: "武汉充电站03"
+      }
+    ]
+  }, {
+    label: "成都市",
+    children: [
+      {
+        label: "成都充电站01"
+      },
+      {
+        label: "成都充电站02"
+      }, {
+        label: "成都充电站03"
+      }
+    ]
+  },
+  {
+    label: "上海市",
+    children: [
+      {
+        label: "上海充电站01"
+      },
+      {
+        label: "上海充电站02"
+      }, {
+        label: "上海充电站03"
+      }
+    ]
+  },
+  {
+    label: "长沙市",
+    children: [
+      {
+        label: "长沙充电站01"
+      },
+      {
+        label: "长沙充电站02"
+      }, {
+        label: "长沙充电站03"
+      }
+    ]
+  }
+]
+
+//计费管理城市接口
+Mock.mock('http://www.demo.com/cityList', "get", () => {
+  return {
+    code: 200,
+    message: "操作成功",
+    data: cityList
+  }
+})
+
+
+//报警管理-报警列表接口
+const alarmList = [
+  {
+    description: "充电桩拿不下来",
+    address: "北京市东城区",
+    equNo: "CD1001",
+    level: 1,//1严重 2紧急 3一般
+    time: "2024-09-15 09:33:24",
+    code: 10023,//故障代码
+    status: 1,//1待指派 2处理中 处理异常
+  },
+  {
+    description: "电动车无法充电",
+    address: "上海市浦东新区",
+    equNo: "CD1002",
+    level: 2,
+    time: "2024-09-16 10:15:00",
+    code: 10024,
+    status: 2,
+  },
+  {
+    description: "充电结束未通知",
+    address: "广州市天河区",
+    equNo: "CD1003",
+    level: 3,
+    time: "2024-09-17 11:28:45",
+    code: 10025,
+    status: 1,
+  },
+  {
+    description: "设备显示屏故障",
+    address: "深圳市南山区",
+    equNo: "CD1004",
+    level: 1,
+    time: "2024-09-18 14:05:12",
+    code: 10026,
+    status: 1,
+  },
+  {
+    description: "无法启动充电",
+    address: "重庆市渝中区",
+    equNo: "CD1005",
+    level: 2,
+    time: "2024-09-19 08:43:09",
+    code: 10027,
+    status: 2,
+  },
+  {
+    description: "充电枪接触不良",
+    address: "杭州市西湖区",
+    equNo: "CD1006",
+    level: 3,
+    time: "2024-09-20 13:17:38",
+    code: 10028,
+    status: 3,
+  },
+  {
+    description: "设备漏电报警",
+    address: "成都市武侯区",
+    equNo: "CD1007",
+    level: 1,
+    time: "2024-09-21 07:26:55",
+    code: 10029,
+    status: 2,
+  },
+]
+
+Mock.mock('https://www.demo.com/alarmList', "get", () => {
+  return {
+    code: 200,
+    message: "操作成功",
+    data: alarmList
+  }
+})
+
+//会员卡管理接口
+Mock.mock('http://www.demo.com/member', 'post', (req) => {
+  const { page, pageSize,no,tel,name } = JSON.parse(req.body);
+  console.log("会员管理接口",page, pageSize,no,tel,name)
+  return {
+    "code": 200,
+    "message": "操作成功",
+    data: Mock.mock({
+      [`list|${pageSize}`]:[{
+        'memberCardNumber': '@id',  // 会员卡号
+        'cardType|1': ["普通卡", "VIP卡", "季卡"],  // 卡类型
+        'issueDate': '@date("yyyy-MM-dd")',  // 开卡日期
+        'holderName': '@cname',  // 持有人姓名
+        'holderPhone': /^1[3-9]\d{9}$/,  // 持有人电话
+        'cardBalance': '@float(100, 10000, 2, 2)',  // 卡余额
+        'transactionRecords|1-5': [{  // 消费记录
+            'transactionDate|1': ["2024-02-18","2024-04-08","2024-10-03","2024-10-15"],  // 消费日期
+            'transactionAmount': '@float(10, 500, 2, 2)',  // 消费金额
+            'transactionType|1': ["充电扣款", "服务费扣款", "停车费扣款", "其他"]  // 消费类型
+        }],
+        'validUntil': '@date("yyyy-MM-dd")'  // 有效期至
+    }],
+    total:53
+    })
+  }
+});
+
+
+//招商管理分类列表接口
+Mock.mock('http://www.demo.com/document',"get",()=>{
+  return {
+    code:200,
+    message:"操作成功",
+    data:{
+      type:["招商类","广告类","公告类","提示类","日常类","告警类","其他"],//文章类型
+      important:["一级","二级","三级","四级"],//重要程度
+      publish:["站内信","公众号","小程序","H5","官网"]//发布渠道
+    }
+  }
+})
+
+// 自定义生成随机账号函数
+Mock.Random.extend({
+  account: function() {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const length = Mock.mock('@natural(6, 10)');
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
+})
+//权限设置页面
+Mock.mock('http://www.demo.com/permissionList','post',(req)=>{
+  const {pageSize} = JSON.parse(req.body);
+  console.log("权限设置接口收到参数",JSON.parse(req.body)) 
+return {
+    code:200,
+    message:"操作成功",
+    data:Mock.mock({
+      [`list|${pageSize}`]:[{
+        'name': '@cname',  // 姓名
+        'account': '@account',//账号
+        'phone': /^1[3-9]\d{9}$/,  // 电话
+        'idNo': '@id',  // 身份证号
+        'position|1':["客服专员",'客服经理','市场专员',"市场经理","运营专员","运营经理","技术工程师","技术经理","Boss"],//职位
+        'department|1':['总裁办','技术部','市场部','维修部','运营部','客服部'],//所属部门
+        "pageAuthority|1":['admin','manager','user','自定义权限'],//页面权限
+        'btnAuthority|1':['add','delete','edit','all','自定义权限'],//按钮权限
+    }],
+    total:41
+    })
+  }
+})
+
+
+const userMenulist = [
+  {
+    name: "数据看板",
+    url: "/dashboard",
+    icon: "DataLine"
+  },
+  {
+    name: "充电站管理",
+    url: "/chargingstation",
+    icon: "Lightning",
+    children: [
+      {
+        name: "充电站监控",
+        url: "/chargingstation/monitor",
+        icon: "VideoCamera"
+      },
+
+      {
+        name: "充电桩管理",
+        url: "/chargingstation/fault",
+        icon: "Warning"
+      }
+    ]
+  },
+  {
+    name: "电子地图",
+    url: "/map",
+    icon: "MapLocation"
+  },
+
+  {
+    name: "报警管理",
+    url: "/alarm",
+    icon: "Phone"
+  },
+
+  {
+    name: "会员卡管理",
+    url: "/equipment",
+    icon: "Magnet"
+  },
+  {
+    name: "个人中心",
+    url: "/personal",
+    icon: "User"
+  },
+]
+//获取当前用户权限
+Mock.mock("http://www.demo.com/userAuth","post",(req)=>{
+ //console.log(234,req.body)
+ const {pageAuthority}=JSON.parse(req.body)
+  console.log("后端收到当前权限",pageAuthority)
+  return {
+    code:200,
+    message:"操作成功",
+    data:{
+      list:pageAuthority=="user"? userMenulist:(pageAuthority=="manager"?menulist2:menulist),
+      btn:pageAuthority=="user"?['add']:(pageAuthority=="manager"?['add',"edit"]:['add',"edit","all","delete"])
+    }
+  }
+})
+
+//权限设置接口
+Mock.mock("http://www.demo.com/setAuth","post",(req)=>{
+  const {btnList,pageList,account}=JSON.parse(req.body)
+  console.log("权限设置接口修改账号权限",account,btnList,pageList)
+  return{
+    code:200,
+    message:"操作成功",
+    data:null
+  }
+})
