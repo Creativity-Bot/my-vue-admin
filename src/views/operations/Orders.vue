@@ -163,7 +163,7 @@ const handleView = (orderId) => {
 const route = useRoute();
 watch(()=>route.name, (newVal, oldVal) => {
     if(newVal == 'orders' && oldVal !== 'detail'){
-        loadData();
+        resetSearch();
     }
 });
 
