@@ -29,7 +29,7 @@
     </el-card>
     <el-card class="mt">
         <el-button type="danger" :disabled="selectedRows.length === 0" @click="batchDelete">批量删除</el-button>
-        <el-button icon="Download" type="primary" :disabled="selectedRows.length === 0" @click="">批量导出到Excel</el-button>
+        <el-button icon="Download" type="primary" :disabled="selectedRows.length === 0" @click="batchExportToExcel">批量导出到Excel</el-button>
     </el-card>
     <el-card class="mt">
         <el-table :data="listData" style="width: 100%" v-loading="isLoading" @selection-change="handleSelectionChange">
@@ -70,6 +70,8 @@ import { batchDeleteApi } from '@/api/operations';
 import { ElMessage } from 'element-plus';
 import { useRouter, useRoute } from 'vue-router';
 import { useTabsStore } from '@/store/tabs';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 const date = ref();
 const searchParams = reactive({
@@ -167,7 +169,13 @@ watch(()=>route.name, (newVal, oldVal) => {
     }
 });
 
-
+const batchExportToExcel = () => {
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(selectedRows.value);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+    const excelArray = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
+    saveAs(new Blob([excelArray], { type: "application/octet-stream"}), '订单数据.xlsx');
+}
 
 </script>
 <style lang="less" scoped>
