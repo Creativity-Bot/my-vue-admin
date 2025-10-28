@@ -33,6 +33,16 @@
     </el-card>
 </template>
 <script setup>
+import { onBeforeRouteLeave } from 'vue-router';
+import { useOrderStore } from '@/store/order';
+const orderStore = useOrderStore();
+const { setLastOrderId } = orderStore;
+onBeforeRouteLeave((to, from, next) => {
+    if(!!from.query.orderId){
+        setLastOrderId(from.query.orderId);
+    }
+    next();
+});
 </script>
 <style lang="less" scoped>
 </style>
