@@ -33,6 +33,9 @@ const routes = [
             {
                 path: '/operations/orders',
                 name: 'orders',
+                meta: {
+                    keepAlive: true
+                },
                 component: () => import('@/views/operations/Orders.vue')
             },
             {

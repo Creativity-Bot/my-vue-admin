@@ -55,7 +55,7 @@
             </el-table-column>
             <el-table-column label="操作">
                 <template #default="scope">
-                    <el-button size="small" type="primary">查看</el-button>
+                    <el-button size="small" type="primary" @click="handleView(scope.row.orderId)">查看</el-button>
                     <el-button size="small" type="danger">删除</el-button>
                 </template>
             </el-table-column>
@@ -65,9 +65,12 @@
 </template>
 <script setup>
 import { useHttp } from '@/hooks/useHttp';
-import { ref, toRefs, reactive} from 'vue';
+import { ref, toRefs, reactive, watch} from 'vue';
 import { batchDeleteApi } from '@/api/operations';
 import { ElMessage } from 'element-plus';
+import { useRouter, useRoute } from 'vue-router';
+import { useTabsStore } from '@/store/tabs';
+
 const date = ref();
 const searchParams = reactive({
     orderId: '',
@@ -146,6 +149,25 @@ const batchDelete = async () => {
         });
     }
 }
+
+const tabsStore = useTabsStore();
+const { addTab, setCurrentTab } = tabsStore;
+
+const router = useRouter();
+const handleView = (orderId) => {
+    addTab('订单详情', `/operations/detail`, 'Share');
+    setCurrentTab('订单详情', `/operations/detail`);
+    router.push(`/operations/detail?orderId=${orderId}`);
+}
+
+const route = useRoute();
+watch(()=>route.name, (newVal, oldVal) => {
+    if(newVal == 'orders' && oldVal !== 'detail'){
+        loadData();
+    }
+});
+
+
 
 </script>
 <style lang="less" scoped>
