@@ -1,7 +1,8 @@
-import { post } from '@/utils/http';
+import { post, get } from '@/utils/http';
 
 const OperationsApiType = {
     ORDER_DELETE: '/batchDelete',
+    CITY_LIST: '/cityList',
 }
 
 function batchDeleteApi(data){
@@ -9,4 +10,8 @@ function batchDeleteApi(data){
     return post(OperationsApiType.ORDER_DELETE, data);
 }
 
-export { batchDeleteApi };
+function cityListApi(){
+    return get(OperationsApiType.CITY_LIST);
+}
+
+export { batchDeleteApi, cityListApi };
