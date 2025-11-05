@@ -2445,7 +2445,7 @@ const alarmList = [
   },
 ]
 
-Mock.mock('https://www.demo.com/alarmList', "get", () => {
+Mock.mock('http://www.demo.com/alarmList', "get", () => {
   return {
     code: 200,
     message: "操作成功",
