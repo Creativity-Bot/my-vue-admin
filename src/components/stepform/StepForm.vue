@@ -37,7 +37,6 @@ const props = defineProps({
     },
 })
 const active = ref(0);
-const active2 = active;
 
 const next = () => {
     const forms = [props.form1, props.form2, props.form3]; // this needs to put in next function to avoid form non accessable
