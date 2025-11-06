@@ -28,13 +28,46 @@
         </el-descriptions>
     </el-card>
     <el-drawer v-model="drawerVisible" title="报警任务指派" size="30%" direction="rtl">
-
+        <StepForm :steps="steps">
+            <template #step-1>
+                <el-form :model="formData.basicInfo" :rules="basicRules" ref="form1">
+                    <el-form-item label="姓名：" prop="name">
+                        <el-input v-model="formData.basicInfo.name" />
+                    </el-form-item>
+                    <el-form-item label="邮箱：" prop="email">
+                        <el-input v-model="formData.basicInfo.email" />
+                    </el-form-item>
+                    <el-form-item label="电话：" prop="tel">
+                        <el-input v-model="formData.basicInfo.tel" />
+                    </el-form-item>
+                    <el-form-item label="工号：" prop="no">
+                        <el-input v-model="formData.basicInfo.no" />
+                    </el-form-item>
+                    <el-form-item label="是否加急：">
+                        <el-switch v-model="formData.basicInfo.urgent"></el-switch>
+                    </el-form-item>
+                    <el-form-item label="其他选项：">
+                        <el-checkbox-group v-model="formData.basicInfo.other">
+                            <el-checkbox value="1">更换设备</el-checkbox>
+                            <el-checkbox value="2">仅维修</el-checkbox>
+                            <el-checkbox value="3">需拍照片</el-checkbox>
+                            <el-checkbox value="4">需报备</el-checkbox>
+                        </el-checkbox-group>
+                    </el-form-item>
+                    <el-form-item label="其他备注信息：">
+                        <el-input v-model="formData.basicInfo.remarks" type="textarea" />
+                    </el-form-item>
+                </el-form>
+            </template>
+        </StepForm>
     </el-drawer>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { getAlarmList } from '@/api/alarm';
 import { getFieldLabel } from './lang';
+import StepForm from '@/components/stepform/StepForm.vue';
+
 const radio = ref('1');
 const alarmList = ref([]);
 onMounted(async () => {
@@ -50,4 +83,46 @@ const handleRadioChange = () => {
     console.log(radio.value);
 }
 const drawerVisible = ref(false);
+const steps = [
+    { title: '基本信息' },
+    { title: '审批信息' },
+    { title: '负责人信息' },
+]
+
+const form1 = ref(null);
+const formData = ref({
+    basicInfo: {
+        name: "",
+        email: "",
+        tel: "",
+        no: "",
+        urgent: true,
+        other: [],
+        remarks: ""
+    },
+    reviewInfo: {
+        a: "",
+        b: ""
+    },
+    reviewerInfo: {
+        person: "",
+        tel: ""
+    }
+})
+
+const basicRules = {
+    name: [
+        { required: true, message: "请输入姓名", trigger: "blur" }
+    ],
+    email: [
+        { required: true, message: "请输入邮箱", trigger: "blur" }
+    ],
+    tel: [
+        { required: true, message: "请输入电话", trigger: "blur" }
+    ],
+    no: [
+        { required: true, message: "请输入工号", trigger: "blur" }
+    ]
+}
+
 </script>
