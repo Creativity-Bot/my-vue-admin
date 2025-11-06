@@ -28,7 +28,7 @@
         </el-descriptions>
     </el-card>
     <el-drawer v-model="drawerVisible" title="报警任务指派" size="30%" direction="rtl">
-        <StepForm :steps="steps">
+        <StepForm :steps="steps" :form1="form1">
             <template #step-1>
                 <el-form :model="formData.basicInfo" :rules="basicRules" ref="form1">
                     <el-form-item label="姓名：" prop="name">

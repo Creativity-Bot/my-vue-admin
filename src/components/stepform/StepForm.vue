@@ -15,24 +15,53 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-defineProps({
+const props = defineProps({
     steps: {
         type: Array,
         required: true,
         default: () => [],
     },
-    nextHandler: {
-        type: Function,
-        required: true,
-        default: () => {},
-    }
+    form1:{
+        type: Object,
+        required: false,
+        default: null,
+    },
+    form2:{
+        type: Object,
+        required: false,
+        default: null,
+    },
+    form3:{
+        type: Object,
+        required: false,
+        default: null,
+    },
 })
 const active = ref(0);
 
 const next = () => {
-    active.value++;
+    if(active.value === 0){
+        props.form1?.validate((valid)=>{
+            if(valid){
+                active.value++;
+            }
+        });
+    }   
+    if(active.value === 1){
+        props.form2?.validate((valid)=>{
+            if(valid){
+                active.value++;
+            }
+        });
+    }
+    if(active.value === 2){
+        props.form3?.validate((valid)=>{
+            if(valid){
+                console.log('submit');
+            }
+        });
+    }
 }
-
 
 </script>
 <style lang="less" scoped></style>
