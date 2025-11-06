@@ -28,7 +28,7 @@
         </el-descriptions>
     </el-card>
     <el-drawer v-model="drawerVisible" title="报警任务指派" size="30%" direction="rtl">
-        <StepForm :steps="steps" :form1="form1">
+        <StepForm :steps="steps" :form1="form1" :form2="form2" :form3="form3">
             <template #step-1>
                 <el-form :model="formData.basicInfo" :rules="basicRules" ref="form1">
                     <el-form-item label="姓名：" prop="name">
@@ -56,6 +56,34 @@
                     </el-form-item>
                     <el-form-item label="其他备注信息：">
                         <el-input v-model="formData.basicInfo.remarks" type="textarea" />
+                    </el-form-item>
+                </el-form>
+            </template>
+            <template #step-2>
+                <el-form :model="formData.reviewInfo" :rules="reviewRules" ref="form2">
+                    <el-form-item label="审批部门" prop="a">
+                        <el-select v-model="formData.reviewInfo.a" placeholder="请选择审批部门">
+                            <el-option label="部门1" value="1" />
+                            <el-option label="部门2" value="2" />
+                            <el-option label="部门3" value="3" />
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="抄送部门" prop="b">
+                        <el-select v-model="formData.reviewInfo.b" placeholder="请选择抄送部门">
+                            <el-option label="部门1" value="1" />
+                            <el-option label="部门2" value="2" />
+                            <el-option label="部门3" value="3" />
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+            </template>
+            <template #step-3>
+                <el-form :model="formData.reviewerInfo" :rules="reviewerRules" ref="form3">
+                    <el-form-item label="负责人" prop="person">
+                        <el-input v-model="formData.reviewerInfo.person" placeholder="请输入负责人"/>
+                    </el-form-item>
+                    <el-form-item label="联系电话" prop="tel">
+                        <el-input v-model="formData.reviewerInfo.tel" placeholder="请输入联系电话"/>
                     </el-form-item>
                 </el-form>
             </template>
@@ -125,4 +153,22 @@ const basicRules = {
     ]
 }
 
+const form2 = ref(null);
+const reviewRules = {
+    a: [
+        { required: true, message: "请选择审批部门", trigger: "blur" }
+    ],
+    b: [
+        { required: true, message: "请选择抄送部门", trigger: "blur" }
+    ]
+}
+const form3 = ref(null);
+const reviewerRules = {
+    person: [
+        { required: true, message: "请输入负责人", trigger: "blur" }
+    ],
+    tel: [
+        { required: true, message: "请输入联系电话", trigger: "blur" }
+    ]
+}
 </script>

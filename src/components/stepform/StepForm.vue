@@ -8,8 +8,7 @@
         <slot name="step-3" v-if="active === 2"></slot>
         <div>
             <el-button v-if="active > 0" @click="active--">上一步</el-button>
-            <el-button type="primary" v-if="active < steps.length - 1" @click="next">{{ '下一步' }}</el-button>
-            <el-button type="primary" v-if="active === steps.length - 1">{{ '提交' }}</el-button>
+            <el-button type="primary" @click="next">{{ active < steps.length - 1 ? '下一步' : '提交' }}</el-button>
         </div>
     </div>
 </template>
@@ -38,30 +37,20 @@ const props = defineProps({
     },
 })
 const active = ref(0);
+const active2 = active;
 
 const next = () => {
-    if(active.value === 0){
-        props.form1?.validate((valid)=>{
-            if(valid){
+    const forms = [props.form1, props.form2, props.form3]; // this needs to put in next function to avoid form non accessable
+    forms[active.value]?.validate((valid)=>{
+        if(valid){
+            if(active.value < props.steps.length - 1){
                 active.value++;
-            }
-        });
-    }   
-    if(active.value === 1){
-        props.form2?.validate((valid)=>{
-            if(valid){
-                active.value++;
-            }
-        });
-    }
-    if(active.value === 2){
-        props.form3?.validate((valid)=>{
-            if(valid){
+            }else{
+                //submit();
                 console.log('submit');
             }
-        });
-    }
+        }
+    });
 }
-
 </script>
 <style lang="less" scoped></style>
