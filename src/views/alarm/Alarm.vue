@@ -28,7 +28,7 @@
         </el-descriptions>
     </el-card>
     <el-drawer v-model="drawerVisible" title="报警任务指派" size="30%" direction="rtl">
-        <StepForm :steps="steps" :form1="form1" :form2="form2" :form3="form3">
+        <StepForm :steps="steps" :form1="form1" :form2="form2" :form3="form3" @submit="handleSubmit">
             <template #step-1>
                 <el-form :model="formData.basicInfo" :rules="basicRules" ref="form1">
                     <el-form-item label="姓名：" prop="name">
@@ -88,12 +88,18 @@
                 </el-form>
             </template>
         </StepForm>
+        <el-result icon="warning" title="设备编号" sub-title="该任务已被催促两次，请尽快处理">
+            <template #extra>
+                <el-button type="primary" @click="drawerVisible = false">我已知晓</el-button>
+            </template>
+        </el-result>
     </el-drawer>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { getAlarmList } from '@/api/alarm';
 import { getFieldLabel } from './lang';
+import { ElMessage } from 'element-plus';
 import StepForm from '@/components/stepform/StepForm.vue';
 
 const radio = ref('1');
@@ -170,5 +176,14 @@ const reviewerRules = {
     tel: [
         { required: true, message: "请输入联系电话", trigger: "blur" }
     ]
+}
+
+const handleSubmit = () => {
+    console.log(formData.value);
+    ElMessage({
+        message: '指派成功',
+        type: 'success',
+    });
+    drawerVisible.value = false;
 }
 </script>

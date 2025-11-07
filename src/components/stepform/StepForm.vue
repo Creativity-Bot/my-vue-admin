@@ -38,6 +38,8 @@ const props = defineProps({
 })
 const active = ref(0);
 
+const emit = defineEmits(['submit']);
+
 const next = () => {
     const forms = [props.form1, props.form2, props.form3]; // this needs to put in next function to avoid form non accessable
     forms[active.value]?.validate((valid)=>{
@@ -45,8 +47,7 @@ const next = () => {
             if(active.value < props.steps.length - 1){
                 active.value++;
             }else{
-                //submit();
-                console.log('submit');
+                emit('submit');
             }
         }
     });
