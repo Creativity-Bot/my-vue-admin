@@ -30,7 +30,7 @@
                     <template #default="scope">
                         <el-popover title="消费记录" content="Left Top prompts info" :width="200" placement="top-start">
                             <template #reference>
-                                <el-button>left-start</el-button>
+                                <el-button>消费记录</el-button>
                             </template>
                             <el-timeline style="max-width: 600px">
                                 <el-timeline-item v-for="(item, index) in scope.row.transactionRecords" :key="index" color="#0bbd87" :timestamp="item.transactionDate">
