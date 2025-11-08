@@ -2508,7 +2508,7 @@ Mock.Random.extend({
 })
 //权限设置页面
 Mock.mock('http://www.demo.com/permissionList','post',(req)=>{
-  const {pageSize} = JSON.parse(req.body);
+  const {pageSize,name,department,page} = JSON.parse(req.body);
   console.log("权限设置接口收到参数",JSON.parse(req.body)) 
 return {
     code:200,
