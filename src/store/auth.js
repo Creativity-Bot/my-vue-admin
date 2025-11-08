@@ -11,16 +11,16 @@ export const useAuthStore = defineStore("auth", ()=>{
     const login = async (data) => {
         try{
             const res = await sendLogin(data);
-            let {data: {token: tokenValue, user:{username, roles, avatar: avatarValue}, menus}} = res;
+            let {data: {token: tokenValue, user:{username, roles: rolesValue, avatar: avatarValue}, menus}} = res;
             token.value = tokenValue;
             userName.value = username;
-            roles.value = roles;
+            roles.value = rolesValue;
             menu.value = menus;
             avatar.value = avatarValue;
             // save just in case of page refresh
             sessionStorage.setItem('token', tokenValue);
             sessionStorage.setItem('userName', username);
-            sessionStorage.setItem('roles', JSON.stringify(roles));
+            sessionStorage.setItem('roles', JSON.stringify(rolesValue));
             sessionStorage.setItem('menu', JSON.stringify(menus));
             sessionStorage.setItem('avatar', avatarValue);
         }catch(error){
