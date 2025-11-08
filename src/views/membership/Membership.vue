@@ -43,10 +43,11 @@
                 </el-table-column>
                 <el-table-column label="有效期至" prop="validUntil"></el-table-column>
             </el-table>
-            <el-pagination class="mt fr" v-model:current-page="pageInfo.currentPage"
+            <el-pagination class="mt fr mb" v-model:current-page="pageInfo.currentPage"
                 v-model:page-size="pageInfo.pageSize" :page-sizes="[10, 20, 30, 40]" :total="totals"
                 layout="total, sizes, prev, pager, next" @size-change="handleSizeChange"
-                @current-change="handleCurrentChange" />
+                @current-change="handleCurrentChange"
+                background />
         </el-card>
     </div>
 </template>
