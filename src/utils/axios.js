@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ElNotification } from 'element-plus';
 const service = axios.create({
-    baseURL: "http://www.demo.com", // replace it with env variable later
+    baseURL: import.meta.env.VITE_API_URL, // replace it with env variable later
     timeout: 5000,
 });
 
