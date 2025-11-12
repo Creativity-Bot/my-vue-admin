@@ -47,7 +47,7 @@
             </el-table-column>
             <el-table-column  label="操作" width="280">
                 <template #default="scope">
-                    <el-button type="primary" size="small">
+                    <el-button type="primary" size="small" @click="handleAccess(scope.row.pageAuthority, scope.row.account)">
                         权限设置
                     </el-button>
                     <el-button type="danger" size="small">
@@ -71,10 +71,13 @@
             background
         />
     </el-card>
+    <Access v-model:visible="accessVisible" :selected-list="selectedList" :selected-btn-authority="selectedBtnAuthority" :selected-account="selectedAccount" @confirm="handleConfirm" />
 </template>
 <script setup>
 import { ref } from 'vue';
 import { useHttp } from '@/hooks/useHttp';
+import Access from './Access.vue';
+import { getAuthListApi } from '@/api/system';
 const searchParams = ref({
     name: '',
     department: '0',
@@ -88,4 +91,39 @@ const handleReset = () => {
     resetPagination();
     loadData();
 }
+
+
+const selectedList = ref([]);
+const selectedBtnAuthority = ref([]);
+const accessVisible = ref(false);
+const selectedAccount = ref('');
+const handleAccess = async (pageAuthority, account) => {
+    try{
+        const {data: {list, btn}} = await getAuthListApi({pageAuthority});
+        selectedList.value = flatAuthList(list);
+        selectedBtnAuthority.value = btn;
+        selectedAccount.value = account;
+        accessVisible.value = true;
+    }catch(error){
+        console.log(error);
+    }
+    
+}
+const handleConfirm = (res) => {
+    console.log(res);
+    loadData();
+}
+
+const flatAuthList = (list)=>{
+    const flatList = [];
+    list.forEach((item)=>{
+        if(item.children){
+            flatList.push(...flatAuthList(item.children));
+        }else if(item.url){
+            flatList.push(item.url);
+        }
+    })
+    return flatList;
+};
+
 </script>
